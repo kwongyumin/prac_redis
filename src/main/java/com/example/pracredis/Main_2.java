@@ -4,6 +4,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.List;
+import java.util.Set;
 
 public class Main_2 {
     public static void main(String[] args) {
@@ -39,6 +40,22 @@ public class Main_2 {
                 if (blpop != null) {
                     blpop.forEach(System.out::println);
                 }
+
+                // set
+
+                jedis.sadd("users:500:follow","100","200","300"); // key / value 입력
+                jedis.srem("users:500:follow","100"); // 삭제
+
+                Set<String> smembers = jedis.smembers("users:500:follow");
+                smembers.forEach(System.out::println);
+
+                jedis.sismember("users:500:follow", "200"); // true
+                jedis.sismember("users:500:follow", "120"); // false
+
+                jedis.scard("users:500:follow"); // 갯수 파악
+
+                // 중복되는 value 추출
+                Set<String> sinter = jedis.sinter("users:500:follow","users:100:follow");
 
             };
         }
